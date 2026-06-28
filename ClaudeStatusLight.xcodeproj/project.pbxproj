@@ -1,0 +1,271 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10D101A2C10000A00000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10D10112C10000A00000001 /* AppCoordinator.swift */; };
+		A10D101B2C10000A00000001 /* ClaudeStatusLightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10D10122C10000A00000001 /* ClaudeStatusLightApp.swift */; };
+		A10D101C2C10000A00000001 /* ClaudeStatusStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10D10132C10000A00000001 /* ClaudeStatusStore.swift */; };
+		A10D101D2C10000A00000001 /* FloatingPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10D10142C10000A00000001 /* FloatingPanelController.swift */; };
+		A10D101E2C10000A00000001 /* TrafficLightPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10D10152C10000A00000001 /* TrafficLightPanelView.swift */; };
+		A10D10222C10000A00000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10D10232C10000A00000001 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10D100E2C10000A00000001 /* ClaudeStatusLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeStatusLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10D10112C10000A00000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		A10D10122C10000A00000001 /* ClaudeStatusLightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStatusLightApp.swift; sourceTree = "<group>"; };
+		A10D10132C10000A00000001 /* ClaudeStatusStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStatusStore.swift; sourceTree = "<group>"; };
+		A10D10142C10000A00000001 /* FloatingPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanelController.swift; sourceTree = "<group>"; };
+		A10D10152C10000A00000001 /* TrafficLightPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrafficLightPanelView.swift; sourceTree = "<group>"; };
+		A10D10172C10000A00000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10D10232C10000A00000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10D100A2C10000A00000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10D10032C10000A00000001 = {
+			isa = PBXGroup;
+			children = (
+				A10D10162C10000A00000001 /* ClaudeStatusLight */,
+				A10D10102C10000A00000001 /* Sources */,
+				A10D100F2C10000A00000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10D100F2C10000A00000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10D100E2C10000A00000001 /* ClaudeStatusLight.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10D10102C10000A00000001 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A10D10122C10000A00000001 /* ClaudeStatusLightApp.swift */,
+				A10D10112C10000A00000001 /* AppCoordinator.swift */,
+				A10D10132C10000A00000001 /* ClaudeStatusStore.swift */,
+				A10D10142C10000A00000001 /* FloatingPanelController.swift */,
+				A10D10152C10000A00000001 /* TrafficLightPanelView.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A10D10162C10000A00000001 /* ClaudeStatusLight */ = {
+			isa = PBXGroup;
+			children = (
+				A10D10172C10000A00000001 /* Info.plist */,
+				A10D10232C10000A00000001 /* Assets.xcassets */,
+			);
+			path = ClaudeStatusLight;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10D100D2C10000A00000001 /* ClaudeStatusLight */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeStatusLight" */;
+			buildPhases = (
+				A10D10092C10000A00000001 /* Sources */,
+				A10D100A2C10000A00000001 /* Frameworks */,
+				A10D100B2C10000A00000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClaudeStatusLight;
+			productName = ClaudeStatusLight;
+			productReference = A10D100E2C10000A00000001 /* ClaudeStatusLight.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10D10042C10000A00000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A10D100D2C10000A00000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeStatusLight" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10D10032C10000A00000001;
+			productRefGroup = A10D100F2C10000A00000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10D100D2C10000A00000001 /* ClaudeStatusLight */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10D100B2C10000A00000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10D10222C10000A00000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10D10092C10000A00000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10D101A2C10000A00000001 /* AppCoordinator.swift in Sources */,
+				A10D101B2C10000A00000001 /* ClaudeStatusLightApp.swift in Sources */,
+				A10D101C2C10000A00000001 /* ClaudeStatusStore.swift in Sources */,
+				A10D101D2C10000A00000001 /* FloatingPanelController.swift in Sources */,
+				A10D101E2C10000A00000001 /* TrafficLightPanelView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10D10082C10000A00000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		A10D10182C10000A00000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A10D101F2C10000A00000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ClaudeStatusLight/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeStatusLight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10D10202C10000A00000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ClaudeStatusLight/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeStatusLight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeStatusLight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10D10082C10000A00000001 /* Debug */,
+				A10D10182C10000A00000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeStatusLight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10D101F2C10000A00000001 /* Debug */,
+				A10D10202C10000A00000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10D10042C10000A00000001 /* Project object */;
+}

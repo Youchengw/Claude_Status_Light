@@ -1,0 +1,7 @@
+{
+  "name": "claude-status-light",
+  "description": "Writes Claude Code activity into a local status file for the floating traffic-light companion app.",
+  "author": {
+    "name": "OpenAI Codex"
+  }
+}
