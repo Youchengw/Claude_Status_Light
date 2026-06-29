@@ -8,9 +8,10 @@ XATTR_BIN="/usr/bin/xattr"
 DITTO_BIN="/usr/bin/ditto"
 RM_BIN="/bin/rm"
 DERIVED_DATA_DIR="${CLAUDE_STATUS_LIGHT_DERIVED_DATA:-${TMPDIR:-/tmp}/ClaudeStatusLightDerivedData}"
-OUTPUT_DIR="${CLAUDE_STATUS_LIGHT_OUTPUT_DIR:-$HOME/Applications}"
+OUTPUT_DIR="${CLAUDE_STATUS_LIGHT_OUTPUT_DIR:-/Applications}"
 BUILT_APP="$DERIVED_DATA_DIR/Build/Products/Release/ClaudeStatusLight.app"
 APP_NAME="ClaudeLight.app"
+STAGING_APP="${TMPDIR:-/tmp}/ClaudeLight.staging.app"
 EXPORTED_APP="$OUTPUT_DIR/$APP_NAME"
 SOURCE_PATHS=(
   "$ROOT_DIR/ClaudeStatusLight.xcodeproj"
@@ -22,7 +23,6 @@ SOURCE_PATHS=(
 )
 
 cd "$ROOT_DIR"
-mkdir -p "$OUTPUT_DIR"
 
 for path in "${SOURCE_PATHS[@]}"; do
   "$XATTR_BIN" -cr "$path" 2>/dev/null || true
@@ -38,10 +38,19 @@ COPYFILE_DISABLE=1 "$XCODEBUILD_BIN" \
   CODE_SIGN_IDENTITY="" \
   build
 
-"$RM_BIN" -rf "$EXPORTED_APP"
-COPYFILE_DISABLE=1 "$DITTO_BIN" "$BUILT_APP" "$EXPORTED_APP"
-"$XATTR_BIN" -cr "$EXPORTED_APP" 2>/dev/null || true
-/usr/bin/codesign --force --deep --sign - --timestamp=none "$EXPORTED_APP"
+# Stage in temp directory so only the final install needs sudo.
+"$RM_BIN" -rf "$STAGING_APP"
+COPYFILE_DISABLE=1 "$DITTO_BIN" "$BUILT_APP" "$STAGING_APP"
+"$XATTR_BIN" -cr "$STAGING_APP" 2>/dev/null || true
+/usr/bin/codesign --force --deep --sign - --timestamp=none "$STAGING_APP"
+
+# Kill running instance before replacing.
+pkill -x ClaudeStatusLight 2>/dev/null || true
+
+echo "Installing to $EXPORTED_APP (may prompt for sudo)..."
+sudo "$RM_BIN" -rf "$EXPORTED_APP"
+sudo COPYFILE_DISABLE=1 "$DITTO_BIN" "$STAGING_APP" "$EXPORTED_APP"
+"$RM_BIN" -rf "$STAGING_APP"
 
 echo "Exported app:"
 echo "$EXPORTED_APP"
