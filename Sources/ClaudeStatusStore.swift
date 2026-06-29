@@ -127,6 +127,7 @@ enum ClaudeStatusFile {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         encoder.dateEncodingStrategy = .iso8601
+        encoder.keyEncodingStrategy = .convertToSnakeCase
 
         let data = try encoder.encode(snapshot)
         try data.write(to: fileURL, options: .atomic)
@@ -157,7 +158,7 @@ final class ClaudeStatusStore: ObservableObject {
         pollTask = Task { [weak self] in
             while !Task.isCancelled {
                 self?.loadSnapshot()
-                try? await Task.sleep(for: .seconds(2))
+                try? await Task.sleep(for: .milliseconds(500))
             }
         }
     }

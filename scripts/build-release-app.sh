@@ -49,8 +49,8 @@ pkill -x ClaudeStatusLight 2>/dev/null || true
 pkill -x ClaudeLight 2>/dev/null || true
 
 echo "Installing to $EXPORTED_APP (may prompt for sudo)..."
-sudo "$RM_BIN" -rf "$EXPORTED_APP"
-sudo COPYFILE_DISABLE=1 "$DITTO_BIN" "$STAGING_APP" "$EXPORTED_APP"
+/usr/bin/sudo "$RM_BIN" -rf "$EXPORTED_APP"
+/usr/bin/sudo COPYFILE_DISABLE=1 "$DITTO_BIN" "$STAGING_APP" "$EXPORTED_APP"
 "$RM_BIN" -rf "$STAGING_APP"
 
 echo "Exported app:"
