@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QFileSystemWatcher, QObject, pyqtSignal
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -55,12 +55,23 @@ class StatusWatcher(QObject):
         if self._started:
             return
         self._file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Ensure the file exists so QFileSystemWatcher can add it.
+        if not self._file.exists():
+            self._file.write_text("{}")
+
         self._read()
+
+        # 1) File-level watcher — catches in-place writes (like DispatchSource on macOS).
+        self._fs_watcher = QFileSystemWatcher([str(self._file)], self)
+        self._fs_watcher.fileChanged.connect(self._on_file_changed)
+
+        # 2) Directory-level watcher — catches atomic writes (temp file + rename).
         handler = _Handler(self._on_change)
         self._observer.schedule(handler, str(self._file.parent), recursive=False)
         self._observer.start()
 
-        # Polling safety net — catches events that watchdog may miss.
+        # 3) Polling safety net — catches any remaining edge cases.
         from PyQt6.QtCore import QTimer
         self._poll_timer = QTimer(self)
         self._poll_timer.timeout.connect(self._poll)
@@ -82,8 +93,19 @@ class StatusWatcher(QObject):
 
     # ── private ──────────────────────────────────────────────
 
+    def _on_file_changed(self, path: str) -> None:
+        """QFileSystemWatcher callback — fires on in-place writes."""
+        self._read()
+        # Re-add if the file was replaced (atomic write); in-place writes stay tracked.
+        if path not in self._fs_watcher.files():
+            self._fs_watcher.addPath(path)
+
     def _on_change(self) -> None:
         self._read()
+        # Re-add file watch in case of atomic write (old inode replaced).
+        fp = str(self._file)
+        if fp not in self._fs_watcher.files():
+            self._fs_watcher.addPath(fp)
 
     def _poll(self) -> None:
         self._read()
