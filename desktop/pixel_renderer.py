@@ -21,7 +21,7 @@ from constants import (
     SKIN_COLOR,
     Status,
     TRAFFIC_GREEN,
-    TRAFFIC_HEIGHT,
+    TRAFFIC_LIGHT_HEIGHT,
     TRAFFIC_HOUSING,
     TRAFFIC_INNER,
     TRAFFIC_LIGHT_WIDTH,
