@@ -22,8 +22,8 @@ HOME="$BUILD_HOME" \
 CLANG_MODULE_CACHE_PATH="$CLANG_CACHE" \
 SWIFTPM_MODULECACHE_OVERRIDE="$SWIFTPM_CACHE" \
 swift build -c release
-nohup env CLAUDE_STATUS_LIGHT_FILE="$STATUS_FILE" "$ROOT_DIR/.build/release/ClaudeStatusLight" > "$LOG_FILE" 2>&1 &
+nohup env CLAUDE_STATUS_LIGHT_FILE="$STATUS_FILE" "$ROOT_DIR/.build/release/ClaudeLight" > "$LOG_FILE" 2>&1 &
 
-echo "ClaudeStatusLight launched in background."
+echo "ClaudeLight launched in background."
 echo "Log: $LOG_FILE"
 echo "Status file: $STATUS_FILE"

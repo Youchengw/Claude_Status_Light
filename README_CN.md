@@ -65,7 +65,7 @@ open ~/Applications/ClaudeStatusLight.app
 如果你想前台直接跑：
 
 ```bash
-swift run ClaudeStatusLight
+swift run ClaudeLight
 ```
 
 ### 2. 用带 plugin 的 Claude Code 启动会话

@@ -38,7 +38,7 @@ This repo contains three parts:
 Or run directly:
 
 ```bash
-swift run ClaudeStatusLight
+swift run ClaudeLight
 ```
 
 ### 2. Start Claude Code with the plugin

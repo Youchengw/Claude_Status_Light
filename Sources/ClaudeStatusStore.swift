@@ -137,24 +137,53 @@ enum ClaudeStatusFile {
 final class ClaudeStatusStore: ObservableObject {
     @Published private(set) var snapshot = ClaudeStatusSnapshot.placeholder
 
-    private var pollTask: Task<Void, Never>?
+    private var source: DispatchSourceFileSystemObject?
+    private var monitoredFD: Int32 = -1
 
     init() {
         loadSnapshot()
-        startPolling()
+        startMonitoring()
     }
 
     deinit {
-        pollTask?.cancel()
+        source?.cancel()
+        if monitoredFD >= 0 {
+            close(monitoredFD)
+        }
     }
 
-    private func startPolling() {
-        pollTask = Task {
-            while !Task.isCancelled {
-                loadSnapshot()
-                try? await Task.sleep(for: .milliseconds(700))
+    private func startMonitoring() {
+        let fileURL = ClaudeStatusFile.url
+        let dirURL = fileURL.deletingLastPathComponent()
+
+        // Ensure the directory exists so we can open it for monitoring.
+        try? FileManager.default.createDirectory(
+            at: dirURL, withIntermediateDirectories: true
+        )
+
+        let fd = open(dirURL.path, O_EVTONLY)
+        guard fd >= 0 else { return }
+
+        monitoredFD = fd
+        let src = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: .write,
+            queue: .main
+        )
+
+        src.setEventHandler { [weak self] in
+            self?.loadSnapshot()
+        }
+
+        src.setCancelHandler { [weak self] in
+            if let fd = self?.monitoredFD, fd >= 0 {
+                close(fd)
+                self?.monitoredFD = -1
             }
         }
+
+        src.resume()
+        source = src
     }
 
     private func loadSnapshot() {
