@@ -4,8 +4,9 @@
 
 🟢 空闲  |  🟡 工作中  |  🔴 等你回应
 
-<!-- TODO: 录一个 5 秒桌宠状态变化的 GIF 放这里 -->
-<!-- ![demo](assets/demo.gif) -->
+| 状态灯变化 | 鼠标摸头 |
+|:---:|:---:|
+| ![status demo](assets/demo-status.gif) | ![head pat demo](assets/demo-pat.gif) |
 
 ## 快速开始
 
