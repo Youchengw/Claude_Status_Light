@@ -1,0 +1,90 @@
+name: Build Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  # ── macOS native SwiftUI app ──────────────────────────────
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .app
+        run: ./scripts/build-release-app.sh
+
+      - name: Package zip
+        run: ./scripts/package-release-zip.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClaudeLight-macOS
+          path: dist/ClaudeLight-macOS.zip
+
+  # ── Windows .exe ──────────────────────────────────────────
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r desktop/requirements.txt
+
+      - name: Build .exe
+        run: pyinstaller --onefile --windowed --name ClaudeLight desktop/main.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClaudeLight-Windows
+          path: dist/ClaudeLight.exe
+
+  # ── Linux binary ──────────────────────────────────────────
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxcb-cursor0 libegl1 libxkbcommon0 libgl1
+
+      - name: Install Python deps
+        run: pip install -r desktop/requirements.txt
+
+      - name: Build binary
+        run: pyinstaller --onefile --name ClaudeLight desktop/main.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClaudeLight-Linux
+          path: dist/ClaudeLight
+
+  # ── GitHub Release ────────────────────────────────────────
+  release:
+    needs: [macos, windows, linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ClaudeLight-*
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ClaudeLight-macOS.zip
+            ClaudeLight.exe
+            ClaudeLight
+          generate_release_notes: true

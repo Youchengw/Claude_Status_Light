@@ -10,14 +10,27 @@ from watchdog.observers import Observer
 
 
 def status_file_path() -> Path:
+    """Return the platform-specific status.json path.
+
+    Priority: CLAUDE_STATUS_LIGHT_FILE env var > platform default.
+    """
     override = os.environ.get("CLAUDE_STATUS_LIGHT_FILE", "").strip()
     if override:
         return Path(override)
-    return (
-        Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-        / "ClaudeLight"
-        / "status.json"
-    )
+
+    import sys
+
+    if sys.platform == "darwin":
+        base = Path.home() / "Library" / "Application Support"
+    elif sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    else:  # Linux / BSD
+        xdg = os.environ.get("XDG_DATA_HOME")
+        base = Path(xdg) if xdg else Path.home() / ".local" / "share"
+
+    # Keep "ClaudeStatusLight" on macOS for backward compatibility.
+    dirname = "ClaudeStatusLight" if sys.platform == "darwin" else "ClaudeLight"
+    return base / dirname / "status.json"
 
 
 class StatusWatcher(QObject):

@@ -4,11 +4,18 @@ A floating pixel-art desktop pet + menu bar icon that shows [Claude Code](https:
 
 🟢 Idle  |  🟡 Working  |  🔴 Awaiting you
 
+<!-- TODO: record a 5-second GIF showing the pet changing status and put it here -->
+<!-- ![demo](assets/demo.gif) -->
+
 ## Quick Start
 
-### 1. Get the app
+### 1. Download
 
-Download `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases), unzip, and drag `ClaudeLight.app` to `/Applications`.
+| Platform | Download |
+|----------|----------|
+| **macOS** | `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) → drag to `/Applications` |
+| **Windows** | `ClaudeLight.exe` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) |
+| **Linux** | `ClaudeLight` binary from [Releases](https://github.com/Youchengw/ClaudeLight/releases), or run from source: `pip install -r desktop/requirements.txt && python desktop/main.py` |
 
 ### 2. Install the plugin
 
@@ -20,18 +27,18 @@ cd ClaudeLight
 
 ### 3. Use Claude Code
 
-Open `ClaudeLight.app` and run `claude` as usual. The light follows automatically.
+Open ClaudeLight and run `claude` as usual. The light follows automatically.
 
 ## Features
 
 - Pixel-art desktop pet with traffic light — always on top, draggable, remembers position
-- Menu bar icon that adapts to light/dark mode
+- Menu bar icon / system tray icon adapts to light/dark mode
 - Idle floating animation + head-pat on mouse hover
-- Launch at Login support
+- Launch at Login support (macOS)
 
 ## Build from Source
 
-Requires Xcode 16+, macOS 14+.
+**macOS** (native SwiftUI, requires Xcode 16+, macOS 14+):
 
 ```bash
 ./scripts/build-release-app.sh            # Build & install to /Applications
@@ -39,10 +46,20 @@ swift run ClaudeLight                     # Run directly via Swift Package Manag
 ./scripts/package-release-zip.sh          # Package as .zip → ./dist/
 ```
 
+**Windows / Linux** (Python + PyQt6):
+
+```bash
+cd desktop
+pip install -r requirements.txt
+python main.py                            # Run directly
+# Windows: build_windows.bat              # → dist/ClaudeLight.exe
+# Linux:   ./build_linux.sh               # → dist/ClaudeLight
+```
+
 ## How It Works
 
 ```
-Claude Code → plugin hooks → status.json ← DispatchSource file monitoring ← SwiftUI app
+Claude Code → plugin hooks → status.json ← file monitoring ← app
 ```
 
 | Hook | Status |
@@ -55,7 +72,7 @@ Claude Code → plugin hooks → status.json ← DispatchSource file monitoring 
 
 ```bash
 ./scripts/uninstall.sh                    # Remove plugin
-sudo rm -rf /Applications/ClaudeLight.app # Remove app
+sudo rm -rf /Applications/ClaudeLight.app # Remove app (macOS)
 ```
 
 ## License
