@@ -252,7 +252,7 @@ struct MenuBarStatusView: View {
     /// Pixel-perfect copy of PixelClaudePetView, scaled to menu bar size.
     /// Template mode adapts to light/dark system appearance automatically.
     private var menuBarIcon: NSImage {
-        let q: CGFloat = 2
+        let q: CGFloat = 1.5
         let w = 18 * q   // 36pt
         let h = 10 * q   // 20pt
 
