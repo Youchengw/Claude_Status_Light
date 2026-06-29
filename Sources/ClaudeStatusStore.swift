@@ -9,11 +9,11 @@ enum ClaudeLightStatus: String, Codable, CaseIterable {
     var title: String {
         switch self {
         case .idle:
-            return "休息中"
+            return "Idle"
         case .working:
-            return "工作中"
+            return "Working"
         case .approval:
-            return "等你回应"
+            return "Awaiting you"
         }
     }
 
