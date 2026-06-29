@@ -8,13 +8,13 @@
 
 ### 1. 获取应用
 
-从 [Releases](https://github.com/Youchengw/Claude_Status_Light/releases) 下载 `ClaudeLight-macOS.zip`，解压后把 `ClaudeLight.app` 拖到 `/Applications`。
+从 [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight-macOS.zip`，解压后把 `ClaudeLight.app` 拖到 `/Applications`。
 
 ### 2. 安装插件
 
 ```bash
-git clone https://github.com/Youchengw/Claude_Status_Light.git
-cd Claude_Status_Light
+git clone https://github.com/Youchengw/ClaudeLight.git
+cd ClaudeLight
 ./scripts/install.sh
 ```
 

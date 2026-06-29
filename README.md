@@ -8,13 +8,13 @@ A floating pixel-art desktop pet + menu bar icon that shows [Claude Code](https:
 
 ### 1. Get the app
 
-Download `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/Claude_Status_Light/releases), unzip, and drag `ClaudeLight.app` to `/Applications`.
+Download `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases), unzip, and drag `ClaudeLight.app` to `/Applications`.
 
 ### 2. Install the plugin
 
 ```bash
-git clone https://github.com/Youchengw/Claude_Status_Light.git
-cd Claude_Status_Light
+git clone https://github.com/Youchengw/ClaudeLight.git
+cd ClaudeLight
 ./scripts/install.sh
 ```
 
