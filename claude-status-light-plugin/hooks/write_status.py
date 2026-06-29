@@ -20,7 +20,18 @@ def resolve_status_file() -> Path:
     if override:
         return Path(override)
 
-    return Path.home() / "Library" / "Application Support" / "ClaudeStatusLight" / "status.json"
+    if sys.platform == "darwin":
+        base = Path.home() / "Library" / "Application Support"
+        dirname = "ClaudeStatusLight"
+    elif sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", str(Path.home() / "AppData" / "Roaming")))
+        dirname = "ClaudeLight"
+    else:  # Linux / BSD
+        xdg = os.environ.get("XDG_DATA_HOME")
+        base = Path(xdg) if xdg else Path.home() / ".local" / "share"
+        dirname = "ClaudeLight"
+
+    return base / dirname / "status.json"
 
 
 def read_stdin_json() -> dict[str, Any]:
