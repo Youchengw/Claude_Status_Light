@@ -4,9 +4,9 @@
 
 🟢 空闲  |  🟡 工作中  |  🔴 等你回应
 
-| 状态灯变化 | 鼠标摸头 |
-|:---:|:---:|
-| ![status demo](assets/demo-status.gif) | ![head pat demo](assets/demo-pat.gif) |
+| 状态灯变化 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 鼠标摸头 |
+|:---:|:---:|:---:|
+| ![status demo](assets/demo-status.gif) | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | ![head pat demo](assets/demo-pat.gif) |
 
 ## 快速开始
 

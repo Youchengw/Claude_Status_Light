@@ -4,9 +4,9 @@ A floating pixel-art desktop pet + menu bar icon that shows [Claude Code](https:
 
 🟢 Idle  |  🟡 Working  |  🔴 Awaiting you
 
-| Status Light | Head Pat |
-|:---:|:---:|
-| ![status demo](assets/demo-status.gif) | ![head pat demo](assets/demo-pat.gif) |
+| Status Light | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Head Pat |
+|:---:|:---:|:---:|
+| ![status demo](assets/demo-status.gif) | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | ![head pat demo](assets/demo-pat.gif) |
 
 ## Quick Start
 
