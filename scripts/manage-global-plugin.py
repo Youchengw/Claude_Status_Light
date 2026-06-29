@@ -103,7 +103,7 @@ def upsert_marketplace_entry(paths: Paths) -> None:
         "name": PLUGIN_NAME,
         "description": "Traffic-light status hooks for Claude Code, paired with the floating macOS companion app.",
         "author": {
-            "name": "OpenAI Codex",
+            "name": "Youcheng Wang",
         },
         "source": f"./plugins/{PLUGIN_NAME}",
         "category": "productivity",

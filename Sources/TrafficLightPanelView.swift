@@ -42,7 +42,7 @@ private struct PixelTrafficLightPet: View {
             PixelTrafficLightView(status: status)
                 .offset(y: -32)
 
-            PixelClaudePetView(isBlinking: isBlinking)
+            PixelClaudePetView(status: status, isBlinking: isBlinking)
                 .offset(y: 16)
         }
     }
@@ -88,28 +88,104 @@ private struct PixelTrafficLightView: View {
 }
 
 private struct PixelClaudePetView: View {
+    let status: ClaudeLightStatus
     let isBlinking: Bool
 
     private let skin = Color(red: 0.92, green: 0.58, blue: 0.47)
     private let eye = Color.black.opacity(0.92)
 
+    @State private var floatOffset: CGFloat = 0
+    @State private var armOffsetX: CGFloat = 0
+    @State private var armOffsetY: CGFloat = 0
+    @State private var isHovering = false
+
+    /// Body pixels without the left arm (which animates independently)
+    private var bodyPixels: [PixelRect] {
+        [
+            PixelRect(x: 3, y: 0, width: 12, height: 7, color: skin),
+            PixelRect(x: 15, y: 4, width: 2, height: 2, color: skin),
+            PixelRect(x: 6, y: isBlinking ? 3 : 2, width: 1, height: isBlinking ? 1 : 2, color: eye),
+            PixelRect(x: 11, y: isBlinking ? 3 : 2, width: 1, height: isBlinking ? 1 : 2, color: eye),
+            PixelRect(x: 5, y: 7, width: 1, height: 2, color: skin),
+            PixelRect(x: 7, y: 7, width: 1, height: 2, color: skin),
+            PixelRect(x: 10, y: 7, width: 1, height: 2, color: skin),
+            PixelRect(x: 12, y: 7, width: 1, height: 2, color: skin)
+        ]
+    }
+
+    /// Left arm at base position (1, 4), will animate up toward head on hover
+    private var leftArmPixels: [PixelRect] {
+        [
+            PixelRect(x: 1, y: 4, width: 2, height: 2, color: skin)
+        ]
+    }
+
     var body: some View {
-        PixelArtView(
-            width: 18,
-            height: 10,
-            pixelSize: 6,
-            pixels: [
-                PixelRect(x: 3, y: 0, width: 12, height: 7, color: skin),
-                PixelRect(x: 1, y: 4, width: 2, height: 2, color: skin),
-                PixelRect(x: 15, y: 4, width: 2, height: 2, color: skin),
-                PixelRect(x: 6, y: isBlinking ? 3 : 2, width: 1, height: isBlinking ? 1 : 2, color: eye),
-                PixelRect(x: 11, y: isBlinking ? 3 : 2, width: 1, height: isBlinking ? 1 : 2, color: eye),
-                PixelRect(x: 5, y: 7, width: 1, height: 2, color: skin),
-                PixelRect(x: 7, y: 7, width: 1, height: 2, color: skin),
-                PixelRect(x: 11, y: 7, width: 1, height: 2, color: skin),
-                PixelRect(x: 13, y: 7, width: 1, height: 2, color: skin)
-            ]
-        )
+        ZStack {
+            PixelArtView(
+                width: 18,
+                height: 10,
+                pixelSize: 6,
+                pixels: bodyPixels
+            )
+
+            PixelArtView(
+                width: 18,
+                height: 10,
+                pixelSize: 6,
+                pixels: leftArmPixels
+            )
+            .offset(x: armOffsetX, y: armOffsetY)
+        }
+        .offset(y: floatOffset)
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .task {
+            let floatDuration: TimeInterval = 2.8
+            let patCycleDuration: TimeInterval = 1.05
+
+            while !Task.isCancelled {
+                let now = Date().timeIntervalSince1970
+
+                // Idle float
+                if status == .idle {
+                    let phase = now.truncatingRemainder(dividingBy: floatDuration) / floatDuration
+                    floatOffset = sin(phase * .pi * 2) * 3
+                } else {
+                    floatOffset = 0
+                }
+
+                // Head pat: left arm lifts up to head, taps, and returns
+                if isHovering {
+                    let progress = now.truncatingRemainder(dividingBy: patCycleDuration) / patCycleDuration
+                    if progress < 0.25 {
+                        // Arm lifts up toward head
+                        let t = progress / 0.25
+                        armOffsetX = t * 6   // 1 pixel right (pixelSize 6)
+                        armOffsetY = -t * 18  // 3 pixels up
+                    } else if progress < 0.4 {
+                        // Brief tap at head
+                        armOffsetX = 6
+                        armOffsetY = -18
+                    } else if progress < 0.65 {
+                        // Arm returns down
+                        let t = (progress - 0.4) / 0.25
+                        armOffsetX = (1 - t) * 6
+                        armOffsetY = -(1 - t) * 18
+                    } else {
+                        // Pause at rest
+                        armOffsetX = 0
+                        armOffsetY = 0
+                    }
+                } else {
+                    armOffsetX = 0
+                    armOffsetY = 0
+                }
+
+                try? await Task.sleep(for: .milliseconds(16))
+            }
+        }
     }
 }
 
@@ -170,44 +246,52 @@ struct MenuBarStatusView: View {
     let status: ClaudeLightStatus
 
     var body: some View {
-        HStack(spacing: 5) {
-            ZStack(alignment: .top) {
-                PixelArtView(
-                    width: 11,
-                    height: 10,
-                    pixelSize: 2,
-                    pixels: [
-                        PixelRect(x: 1, y: 0, width: 8, height: 2, color: .black),
-                        PixelRect(x: 2, y: 1, width: 2, height: 1, color: lampColor(for: .approval)),
-                        PixelRect(x: 4, y: 1, width: 2, height: 1, color: lampColor(for: .working)),
-                        PixelRect(x: 6, y: 1, width: 2, height: 1, color: lampColor(for: .idle)),
-                        PixelRect(x: 2, y: 3, width: 7, height: 3, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 1, y: 4, width: 1, height: 1, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 9, y: 4, width: 1, height: 1, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 4, y: 4, width: 1, height: 1, color: .black),
-                        PixelRect(x: 7, y: 4, width: 1, height: 1, color: .black),
-                        PixelRect(x: 3, y: 6, width: 1, height: 2, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 4, y: 6, width: 1, height: 2, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 7, y: 6, width: 1, height: 2, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 8, y: 6, width: 1, height: 2, color: Color(red: 0.92, green: 0.58, blue: 0.47)),
-                        PixelRect(x: 3, y: 8, width: 6, height: 1, color: .black)
-                    ]
-                )
-            }
-
-            Text("CC")
-                .font(.system(size: 10, weight: .bold, design: .monospaced))
-        }
-        .padding(.horizontal, 2)
+        Image(nsImage: menuBarIcon)
     }
 
-    private func lampColor(for state: ClaudeLightStatus) -> Color {
-        state == status ? state.accentColor : Color.black.opacity(0.45)
+    /// Pixel-perfect copy of PixelClaudePetView, scaled to menu bar size.
+    /// Template mode adapts to light/dark system appearance automatically.
+    private var menuBarIcon: NSImage {
+        let q: CGFloat = 2
+        let w = 18 * q   // 36pt
+        let h = 10 * q   // 20pt
+
+        let image = NSImage(size: NSSize(width: w, height: h), flipped: true) { _ in
+            guard let ctx = NSGraphicsContext.current else { return false }
+
+            NSColor.black.setFill()
+
+            // Body
+            NSBezierPath(rect: NSRect(x: 3*q, y: 0, width: 12*q, height: 7*q)).fill()
+            // Left arm
+            NSBezierPath(rect: NSRect(x: 1*q, y: 4*q, width: 2*q, height: 2*q)).fill()
+            // Right arm
+            NSBezierPath(rect: NSRect(x: 15*q, y: 4*q, width: 2*q, height: 2*q)).fill()
+
+            // Eyes — cut transparent holes in the body
+            ctx.saveGraphicsState()
+            ctx.compositingOperation = .clear
+            NSBezierPath(rect: NSRect(x: 6*q, y: 2*q, width: 1*q, height: 2*q)).fill()
+            NSBezierPath(rect: NSRect(x: 11*q, y: 2*q, width: 1*q, height: 2*q)).fill()
+            ctx.restoreGraphicsState()
+
+            // Legs
+            NSColor.black.setFill()
+            NSBezierPath(rect: NSRect(x: 5*q, y: 7*q, width: 1*q, height: 2*q)).fill()
+            NSBezierPath(rect: NSRect(x: 7*q, y: 7*q, width: 1*q, height: 2*q)).fill()
+            NSBezierPath(rect: NSRect(x: 10*q, y: 7*q, width: 1*q, height: 2*q)).fill()
+            NSBezierPath(rect: NSRect(x: 12*q, y: 7*q, width: 1*q, height: 2*q)).fill()
+
+            return true
+        }
+
+        image.isTemplate = true
+        return image
     }
 }
 
 private struct PixelRect: Identifiable {
-    let id = UUID()
+    var id: String { "\(x),\(y),\(width),\(height)" }
     let x: Int
     let y: Int
     let width: Int

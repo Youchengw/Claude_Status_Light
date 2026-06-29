@@ -11,6 +11,13 @@ SWIFTPM_CACHE="$ROOT_DIR/.runtime/swiftpm-cache"
 cd "$ROOT_DIR"
 mkdir -p "$ROOT_DIR/.runtime"
 mkdir -p "$BUILD_HOME" "$CLANG_CACHE" "$SWIFTPM_CACHE"
+
+# Preserve access to real ~/.swiftpm inside the isolated build home
+REAL_SWIFTPM="$HOME/.swiftpm"
+if [ -d "$REAL_SWIFTPM" ] && [ ! -e "$BUILD_HOME/.swiftpm" ]; then
+  ln -s "$REAL_SWIFTPM" "$BUILD_HOME/.swiftpm"
+fi
+
 HOME="$BUILD_HOME" \
 CLANG_MODULE_CACHE_PATH="$CLANG_CACHE" \
 SWIFTPM_MODULECACHE_OVERRIDE="$SWIFTPM_CACHE" \

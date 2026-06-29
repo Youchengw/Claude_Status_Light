@@ -1,4 +1,4 @@
-import AppKit
+@preconcurrency import AppKit
 import ServiceManagement
 import SwiftUI
 
@@ -121,7 +121,6 @@ final class AppCoordinator: ObservableObject {
 
         if useSavedOrigin, let savedOrigin = savedPanelOrigin(for: panelSize) {
             panel.setFrameOrigin(savedOrigin)
-            savePanelOrigin(savedOrigin)
             return
         }
 

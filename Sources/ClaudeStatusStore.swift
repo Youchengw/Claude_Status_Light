@@ -144,6 +144,10 @@ final class ClaudeStatusStore: ObservableObject {
         startPolling()
     }
 
+    deinit {
+        pollTask?.cancel()
+    }
+
     private func startPolling() {
         pollTask = Task {
             while !Task.isCancelled {

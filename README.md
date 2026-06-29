@@ -1,6 +1,8 @@
 # Claude Status Light
 
-一个给 Claude Code 配的 macOS 状态灯小工具。它会在菜单栏和桌面悬浮窗里显示 Claude 当前状态：
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+一个给 Claude Code 配的 macOS 状态灯小工具，在菜单栏和桌面悬浮窗里实时显示 Claude 当前状态：
 
 - 绿灯: `休息中`
 - 黄灯: `工作中`
@@ -16,13 +18,13 @@
 
 ## 当前效果
 
-- 常驻 macOS 状态栏
-- 默认显示一个始终置顶的桌宠悬浮窗
-- 面板可以拖动
-- 面板会记住你上次拖到的位置
-- 菜单栏菜单里可以隐藏/显示面板
-- 支持从菜单里打开/关闭开机自启动
-- 支持菜单内手动预览三种状态
+- 常驻 macOS 状态栏，显示黑白像素小桌宠图标（自动适配浅色/深色模式）
+- 默认显示始终置顶的像素桌宠悬浮窗，头顶红绿灯
+- 待机时桌宠会轻微上下浮动
+- 鼠标移到桌宠上会触发摸头动画
+- 面板可拖动，位置自动记忆
+- 菜单里可隐藏/显示面板、切换状态预览
+- 支持开机自启动（Launch at Login）
 
 ## 推荐用法
 
@@ -201,8 +203,6 @@ CLAUDE_STATUS_LIGHT_OUTPUT_DIR="/your/output/folder" ./scripts/build-release-app
 - app: `~/Applications/ClaudeStatusLight.app`
 - zip: `./dist/ClaudeStatusLight-macOS.zip`
 
-如果你下一步还想继续打磨，可以往这几个方向走：
+## License
 
-1. 给这个 Xcode 工程补 app icon、签名和 Archive 导出流程
-2. 直接帮你把全局 plugin 安装到当前用户环境里
-3. 再补一轮视觉细节，比如更丰富的状态动画或更完整的设置项
+MIT © Youcheng Wang
