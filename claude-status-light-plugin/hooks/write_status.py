@@ -89,7 +89,22 @@ def should_ignore_update(existing: dict[str, Any], incoming_status: str, incomin
     return 0 <= age_seconds <= STALE_APPROVAL_GRACE_SECONDS
 
 
+def _log_timing(status_file: Path, status: str, source: str, elapsed_ms: float) -> None:
+    """Write a one-line timing record to a debug log for latency profiling."""
+    try:
+        log_path = status_file.parent / "timing.log"
+        ts = datetime.now(timezone.utc).isoformat()
+        line = f"{ts} status={status} source={source} elapsed_ms={elapsed_ms:.1f}\n"
+        with log_path.open("a", encoding="utf-8") as fh:
+            fh.write(line)
+    except Exception:
+        pass  # never let timing interfere with the hook
+
+
 def main() -> int:
+    import time
+    t0 = time.perf_counter()
+
     status = sys.argv[1] if len(sys.argv) > 1 else "idle"
     source = sys.argv[2] if len(sys.argv) > 2 else "hook"
     detail_arg = sys.argv[3] if len(sys.argv) > 3 else None
@@ -106,6 +121,7 @@ def main() -> int:
     now = datetime.now(timezone.utc)
 
     if should_ignore_update(existing_snapshot, status, source, now):
+        _log_timing(status_file, status, source, (time.perf_counter() - t0) * 1000)
         print("{}")
         return 0
 
@@ -123,6 +139,8 @@ def main() -> int:
     with status_file.open("w", encoding="utf-8") as handle:
         json.dump(snapshot, handle, ensure_ascii=False, indent=2, sort_keys=True)
         handle.write("\n")
+
+    _log_timing(status_file, status, source, (time.perf_counter() - t0) * 1000)
 
     print("{}")
     return 0
