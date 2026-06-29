@@ -137,63 +137,77 @@ enum ClaudeStatusFile {
 final class ClaudeStatusStore: ObservableObject {
     @Published private(set) var snapshot = ClaudeStatusSnapshot.placeholder
 
-    private var source: DispatchSourceFileSystemObject?
-    private var monitoredFD: Int32 = -1
+    private var fileSource: DispatchSourceFileSystemObject?
+    private var dirSource: DispatchSourceFileSystemObject?
+    private var pollTask: Task<Void, Never>?
 
     init() {
         loadSnapshot()
         startMonitoring()
+        startPolling()
     }
 
     deinit {
-        source?.cancel()
+        fileSource?.cancel()
+        dirSource?.cancel()
+        pollTask?.cancel()
+    }
+
+    private func startPolling() {
+        pollTask = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.loadSnapshot()
+                try? await Task.sleep(for: .seconds(2))
+            }
+        }
     }
 
     private func startMonitoring() {
-        // Tear down any existing source before opening a new fd so the
-        // cancel handler closes the right descriptor.
-        if let oldSource = source {
-            oldSource.cancel()
-            source = nil
-        }
+        fileSource?.cancel()
+        dirSource?.cancel()
 
         let fileURL = ClaudeStatusFile.url
         let dirURL = fileURL.deletingLastPathComponent()
 
-        // Ensure the directory exists before we try to open a file inside it.
+        // Ensure the directory exists.
         try? FileManager.default.createDirectory(
             at: dirURL, withIntermediateDirectories: true
         )
 
-        let fd = open(fileURL.path, O_EVTONLY | O_CREAT, 0o644)
-        guard fd >= 0 else { return }
-
-        monitoredFD = fd
-        let src = DispatchSource.makeFileSystemObjectSource(
-            fileDescriptor: fd,
-            eventMask: [.write, .extend, .delete],
-            queue: .main
-        )
-
-        src.setEventHandler { [weak self] in
-            let events = src.data
-            if events.contains(.delete) {
-                // Atomic write (write-then-rename) deletes the old inode —
-                // re-open to monitor the new inode, then load the new content.
-                self?.startMonitoring()
-                self?.loadSnapshot()
-            } else {
+        // 1) File source — catches in-place writes (Python plugin `open("w")`).
+        let fileFD = open(fileURL.path, O_EVTONLY | O_CREAT, 0o644)
+        if fileFD >= 0 {
+            let src = DispatchSource.makeFileSystemObjectSource(
+                fileDescriptor: fileFD,
+                eventMask: [.write, .extend],
+                queue: .main
+            )
+            src.setEventHandler { [weak self] in
                 self?.loadSnapshot()
             }
+            src.setCancelHandler { close(fileFD) }
+            src.resume()
+            fileSource = src
         }
 
-        src.setCancelHandler {
-            // Capture fd by value so we close the inode this source was watching.
-            close(fd)
+        // 2) Directory source — catches atomic writes (Swift menu preview).
+        //    .atomic writes create a temp file + rename — directory-level
+        //    .write events fire even when file-level events miss.
+        let dirFD = open(dirURL.path, O_EVTONLY)
+        if dirFD >= 0 {
+            let src = DispatchSource.makeFileSystemObjectSource(
+                fileDescriptor: dirFD,
+                eventMask: .write,
+                queue: .main
+            )
+            src.setEventHandler { [weak self] in
+                self?.startMonitoring()
+                self?.loadSnapshot()
+            }
+            src.setCancelHandler { close(dirFD) }
+            src.resume()
+            dirSource = src
         }
-
-        src.resume()
-        source = src
     }
 
     private func loadSnapshot() {
