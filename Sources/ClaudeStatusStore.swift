@@ -147,39 +147,48 @@ final class ClaudeStatusStore: ObservableObject {
 
     deinit {
         source?.cancel()
-        if monitoredFD >= 0 {
-            close(monitoredFD)
-        }
     }
 
     private func startMonitoring() {
+        // Tear down any existing source before opening a new fd so the
+        // cancel handler closes the right descriptor.
+        if let oldSource = source {
+            oldSource.cancel()
+            source = nil
+        }
+
         let fileURL = ClaudeStatusFile.url
         let dirURL = fileURL.deletingLastPathComponent()
 
-        // Ensure the directory exists so we can open it for monitoring.
+        // Ensure the directory exists before we try to open a file inside it.
         try? FileManager.default.createDirectory(
             at: dirURL, withIntermediateDirectories: true
         )
 
-        let fd = open(dirURL.path, O_EVTONLY)
+        let fd = open(fileURL.path, O_EVTONLY | O_CREAT, 0o644)
         guard fd >= 0 else { return }
 
         monitoredFD = fd
         let src = DispatchSource.makeFileSystemObjectSource(
             fileDescriptor: fd,
-            eventMask: .write,
+            eventMask: [.write, .extend, .delete],
             queue: .main
         )
 
         src.setEventHandler { [weak self] in
-            self?.loadSnapshot()
+            let events = src.data
+            if events.contains(.delete) {
+                // Atomic write (write-then-rename) deletes the old inode —
+                // re-open to monitor the new inode.
+                self?.startMonitoring()
+            } else {
+                self?.loadSnapshot()
+            }
         }
 
-        src.setCancelHandler { [weak self] in
-            if let fd = self?.monitoredFD, fd >= 0 {
-                close(fd)
-                self?.monitoredFD = -1
-            }
+        src.setCancelHandler {
+            // Capture fd by value so we close the inode this source was watching.
+            close(fd)
         }
 
         src.resume()
