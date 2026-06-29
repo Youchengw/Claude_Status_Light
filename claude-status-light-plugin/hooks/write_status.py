@@ -12,7 +12,7 @@ from typing import Any
 
 VALID_STATUSES = {"idle", "working", "approval"}
 APPROVAL_SOURCES = {"permission-prompt", "elicitation-dialog"}
-STALE_APPROVAL_GRACE_SECONDS = 3.0
+STALE_APPROVAL_GRACE_SECONDS = 0.5
 
 
 def resolve_status_file() -> Path:
