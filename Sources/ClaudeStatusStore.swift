@@ -179,8 +179,9 @@ final class ClaudeStatusStore: ObservableObject {
             let events = src.data
             if events.contains(.delete) {
                 // Atomic write (write-then-rename) deletes the old inode —
-                // re-open to monitor the new inode.
+                // re-open to monitor the new inode, then load the new content.
                 self?.startMonitoring()
+                self?.loadSnapshot()
             } else {
                 self?.loadSnapshot()
             }
