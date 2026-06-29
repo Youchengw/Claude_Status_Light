@@ -3,6 +3,7 @@
 import json
 import os
 from pathlib import Path
+from typing import Any
 
 from PyQt6.QtCore import QObject, pyqtSignal
 from watchdog.events import FileSystemEventHandler
@@ -43,6 +44,8 @@ class StatusWatcher(QObject):
         self._file = status_file_path()
         self._observer = Observer()
         self._started = False
+        self._last_data: dict | None = None
+        self._poll_timer: Any = None  # QTimer
 
     @property
     def file_path(self) -> Path:
@@ -56,11 +59,20 @@ class StatusWatcher(QObject):
         handler = _Handler(self._on_change)
         self._observer.schedule(handler, str(self._file.parent), recursive=False)
         self._observer.start()
+
+        # Polling safety net — catches events that watchdog may miss.
+        from PyQt6.QtCore import QTimer
+        self._poll_timer = QTimer(self)
+        self._poll_timer.timeout.connect(self._poll)
+        self._poll_timer.start(500)
+
         self._started = True
 
     def stop(self) -> None:
         if not self._started:
             return
+        if self._poll_timer is not None:
+            self._poll_timer.stop()
         self._observer.stop()
         self._observer.join(timeout=2)
         self._started = False
@@ -73,14 +85,20 @@ class StatusWatcher(QObject):
     def _on_change(self) -> None:
         self._read()
 
+    def _poll(self) -> None:
+        self._read()
+
     def _read(self) -> None:
         try:
             data = json.loads(self._file.read_text(encoding="utf-8"))
         except (FileNotFoundError, json.JSONDecodeError, OSError):
             return
 
-        status = data.get("status", "idle")
-        self.status_changed.emit(status, data)
+        # Only emit if the content actually changed.
+        if data != self._last_data:
+            self._last_data = data
+            status = data.get("status", "idle")
+            self.status_changed.emit(status, data)
 
 
 class _Handler(FileSystemEventHandler):
