@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A10D100D2C10000A00000001"
-               BuildableName = "ClaudeStatusLight.app"
-               BlueprintName = "ClaudeStatusLight"
-               ReferencedContainer = "container:ClaudeStatusLight.xcodeproj">
+               BuildableName = "ClaudeLight.app"
+               BlueprintName = "ClaudeLight"
+               ReferencedContainer = "container:ClaudeLight.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A10D100D2C10000A00000001"
-            BuildableName = "ClaudeStatusLight.app"
-            BlueprintName = "ClaudeStatusLight"
-            ReferencedContainer = "container:ClaudeStatusLight.xcodeproj">
+            BuildableName = "ClaudeLight.app"
+            BlueprintName = "ClaudeLight"
+            ReferencedContainer = "container:ClaudeLight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A10D100D2C10000A00000001"
-            BuildableName = "ClaudeStatusLight.app"
-            BlueprintName = "ClaudeStatusLight"
-            ReferencedContainer = "container:ClaudeStatusLight.xcodeproj">
+            BuildableName = "ClaudeLight.app"
+            BlueprintName = "ClaudeLight"
+            ReferencedContainer = "container:ClaudeLight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

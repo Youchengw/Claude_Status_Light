@@ -7,15 +7,15 @@ XCODEBUILD_BIN="$DEVELOPER_DIR/usr/bin/xcodebuild"
 XATTR_BIN="/usr/bin/xattr"
 DITTO_BIN="/usr/bin/ditto"
 RM_BIN="/bin/rm"
-DERIVED_DATA_DIR="${CLAUDE_STATUS_LIGHT_DERIVED_DATA:-${TMPDIR:-/tmp}/ClaudeStatusLightDerivedData}"
+DERIVED_DATA_DIR="${CLAUDE_STATUS_LIGHT_DERIVED_DATA:-${TMPDIR:-/tmp}/ClaudeLightDerivedData}"
 OUTPUT_DIR="${CLAUDE_STATUS_LIGHT_OUTPUT_DIR:-/Applications}"
-BUILT_APP="$DERIVED_DATA_DIR/Build/Products/Release/ClaudeStatusLight.app"
+BUILT_APP="$DERIVED_DATA_DIR/Build/Products/Release/ClaudeLight.app"
 APP_NAME="ClaudeLight.app"
 STAGING_APP="${TMPDIR:-/tmp}/ClaudeLight.staging.app"
 EXPORTED_APP="$OUTPUT_DIR/$APP_NAME"
 SOURCE_PATHS=(
-  "$ROOT_DIR/ClaudeStatusLight.xcodeproj"
-  "$ROOT_DIR/ClaudeStatusLight"
+  "$ROOT_DIR/ClaudeLight.xcodeproj"
+  "$ROOT_DIR/ClaudeLight"
   "$ROOT_DIR/Sources"
   "$ROOT_DIR/scripts"
   "$ROOT_DIR/README.md"
@@ -29,8 +29,8 @@ for path in "${SOURCE_PATHS[@]}"; do
 done
 
 COPYFILE_DISABLE=1 "$XCODEBUILD_BIN" \
-  -project ClaudeStatusLight.xcodeproj \
-  -scheme ClaudeStatusLight \
+  -project ClaudeLight.xcodeproj \
+  -scheme ClaudeLight \
   -configuration Release \
   -derivedDataPath "$DERIVED_DATA_DIR" \
   CODE_SIGNING_ALLOWED=NO \
@@ -44,8 +44,9 @@ COPYFILE_DISABLE=1 "$DITTO_BIN" "$BUILT_APP" "$STAGING_APP"
 "$XATTR_BIN" -cr "$STAGING_APP" 2>/dev/null || true
 /usr/bin/codesign --force --deep --sign - --timestamp=none "$STAGING_APP"
 
-# Kill running instance before replacing.
+# Kill running instance before replacing (covers old and new binary names).
 pkill -x ClaudeStatusLight 2>/dev/null || true
+pkill -x ClaudeLight 2>/dev/null || true
 
 echo "Installing to $EXPORTED_APP (may prompt for sudo)..."
 sudo "$RM_BIN" -rf "$EXPORTED_APP"

@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A10D100E2C10000A00000001 /* ClaudeStatusLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeStatusLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10D100E2C10000A00000001 /* ClaudeLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10D10112C10000A00000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		A10D10122C10000A00000001 /* ClaudeStatusLightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStatusLightApp.swift; sourceTree = "<group>"; };
 		A10D10132C10000A00000001 /* ClaudeStatusStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStatusStore.swift; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		A10D10032C10000A00000001 = {
 			isa = PBXGroup;
 			children = (
-				A10D10162C10000A00000001 /* ClaudeStatusLight */,
+				A10D10162C10000A00000001 /* ClaudeLight */,
 				A10D10102C10000A00000001 /* Sources */,
 				A10D100F2C10000A00000001 /* Products */,
 			);
@@ -49,7 +49,7 @@
 		A10D100F2C10000A00000001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A10D100E2C10000A00000001 /* ClaudeStatusLight.app */,
+				A10D100E2C10000A00000001 /* ClaudeLight.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,21 +66,21 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		A10D10162C10000A00000001 /* ClaudeStatusLight */ = {
+		A10D10162C10000A00000001 /* ClaudeLight */ = {
 			isa = PBXGroup;
 			children = (
 				A10D10172C10000A00000001 /* Info.plist */,
 				A10D10232C10000A00000001 /* Assets.xcassets */,
 			);
-			path = ClaudeStatusLight;
+			path = ClaudeLight;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A10D100D2C10000A00000001 /* ClaudeStatusLight */ = {
+		A10D100D2C10000A00000001 /* ClaudeLight */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeStatusLight" */;
+			buildConfigurationList = A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeLight" */;
 			buildPhases = (
 				A10D10092C10000A00000001 /* Sources */,
 				A10D100A2C10000A00000001 /* Frameworks */,
@@ -90,9 +90,9 @@
 			);
 			dependencies = (
 			);
-			name = ClaudeStatusLight;
-			productName = ClaudeStatusLight;
-			productReference = A10D100E2C10000A00000001 /* ClaudeStatusLight.app */;
+			name = ClaudeLight;
+			productName = ClaudeLight;
+			productReference = A10D100E2C10000A00000001 /* ClaudeLight.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -110,7 +110,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeStatusLight" */;
+			buildConfigurationList = A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeLight" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -123,7 +123,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A10D100D2C10000A00000001 /* ClaudeStatusLight */,
+				A10D100D2C10000A00000001 /* ClaudeLight */,
 			);
 		};
 /* End PBXProject section */
@@ -205,14 +205,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ClaudeStatusLight/Info.plist;
+				INFOPLIST_FILE = ClaudeLight/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeStatusLight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -229,14 +229,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ClaudeStatusLight/Info.plist;
+				INFOPLIST_FILE = ClaudeLight/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeStatusLight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yccccw.ClaudeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -247,7 +247,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeStatusLight" */ = {
+		A10D10072C10000A00000001 /* Build configuration list for PBXProject "ClaudeLight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A10D10082C10000A00000001 /* Debug */,
@@ -256,7 +256,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeStatusLight" */ = {
+		A10D10212C10000A00000001 /* Build configuration list for PBXNativeTarget "ClaudeLight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A10D101F2C10000A00000001 /* Debug */,

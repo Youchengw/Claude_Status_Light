@@ -171,7 +171,7 @@ struct MenuContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Claude Status Light")
+            Text("ClaudeLight")
                 .font(.headline)
             Text(coordinator.store.snapshot.status.menuDescription)
                 .font(.subheadline)
