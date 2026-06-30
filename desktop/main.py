@@ -15,11 +15,9 @@ class App(QObject):
     """Top-level controller that wires the floating window, status watcher,
     and system tray together.
 
-    The ``quit()`` method may be called from *any* thread (tray menu
-    callbacks fire on pystray's daemon thread).  We bridge to the Qt
-    main thread via a queued signal so that Qt cleanup is thread-safe
-    and we never call ``pystray.Icon.stop()`` from inside its own
-    callback (which would deadlock on Windows).
+    The ``quit()`` method bridges to the Qt main thread via a queued
+    signal so that cleanup is always thread-safe regardless of where
+    the tray menu callback fires from.
     """
 
     _do_quit = pyqtSignal()
@@ -42,9 +40,10 @@ class App(QObject):
             on_set_status=self._on_set_status,
             on_quit=self.quit,
         )
-        self._tray.run_detached()
 
-        # Ensure cleanup always happens in the Qt main thread.
+        # Ensure cleanup always happens in the Qt main thread
+        # (tray menu callbacks fire on the Qt main thread now, but
+        # keeping the signal for safety and future-proofing).
         self._do_quit.connect(self._perform_quit)
 
         self._window.show()

@@ -1,52 +1,59 @@
-"""System tray icon with menu, mirroring the macOS menu bar experience."""
+"""System tray icon with menu via QSystemTrayIcon — no extra dependencies."""
 
 from __future__ import annotations
 
-from PIL import Image, ImageDraw
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction, QBrush, QColor, QIcon, QPainter, QPixmap
+from PyQt6.QtWidgets import QMenu, QSystemTrayIcon
 
 from constants import Status
 
-try:
-    import pystray
-except ImportError:
-    pystray = None  # type: ignore[assignment]
 
+def _make_tray_icon() -> QIcon:
+    """Draw a 32×32 pixel-art pet silhouette (matches MenuBarStatusView).
 
-def _make_tray_image() -> Image.Image:
-    """Draw a 32×32 pixel-art pet silhouette (matches MenuBarStatusView)."""
+    Uses QPainter on a QPixmap instead of PIL so we can drop the Pillow
+    and pystray dependencies entirely.
+    """
     q = 1.5
-    w, h = 18, 10
-    img = Image.new("RGBA", (int(w * q * 2), int(h * q * 2)), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    c = (24, 24, 24, 255)  # dark silhouette
+    pixmap = QPixmap(int(18 * q * 2), int(10 * q * 2))
+    pixmap.fill(Qt.GlobalColor.transparent)
 
-    def rect(x, y, rw, rh):
-        draw.rectangle(
-            [x * q * 2, y * q * 2, (x + rw) * q * 2 - 1, (y + rh) * q * 2 - 1],
-            fill=c,
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
+
+    c = QColor(24, 24, 24, 255)  # dark silhouette
+    painter.setBrush(QBrush(c))
+    painter.setPen(Qt.PenStyle.NoPen)
+
+    def _r(x: int, y: int, w: int, h: int) -> None:
+        painter.drawRect(
+            int(x * q * 2), int(y * q * 2),
+            int(w * q * 2) - 1, int(h * q * 2) - 1,
         )
 
     # Body
-    rect(3, 0, 12, 7)
+    _r(3, 0, 12, 7)
     # Arms
-    rect(1, 4, 2, 2)
-    rect(15, 4, 2, 2)
-    # Eyes (cutouts — draw in background color)
-    draw.rectangle([6 * q * 2, 2 * q * 2, (6 + 1) * q * 2 - 1, (2 + 2) * q * 2 - 1],
-                   fill=(0, 0, 0, 0))
-    draw.rectangle([11 * q * 2, 2 * q * 2, (11 + 1) * q * 2 - 1, (2 + 2) * q * 2 - 1],
-                   fill=(0, 0, 0, 0))
+    _r(1, 4, 2, 2)
+    _r(15, 4, 2, 2)
     # Legs
-    rect(5, 7, 1, 2)
-    rect(7, 7, 1, 2)
-    rect(10, 7, 1, 2)
-    rect(12, 7, 1, 2)
+    _r(5, 7, 1, 2)
+    _r(7, 7, 1, 2)
+    _r(10, 7, 1, 2)
+    _r(12, 7, 1, 2)
 
-    return img
+    painter.end()
+    return QIcon(pixmap)
 
 
-class SystemTray:
-    """Wraps pystray.Icon with a context menu controlling the floating window."""
+class SystemTray(QSystemTrayIcon):
+    """Qt-native system tray icon with a context menu.
+
+    Replaces the old pystray-based tray so that everything runs in the
+    Qt main thread — no cross-thread issues, and menus work reliably
+    on Linux desktops (GNOME, KDE, Xfce, …).
+    """
 
     def __init__(
         self,
@@ -56,8 +63,7 @@ class SystemTray:
         on_set_status: callable,
         on_quit: callable,
     ) -> None:
-        if pystray is None:
-            raise RuntimeError("pystray is not installed")
+        super().__init__()
         self._on_show = on_show
         self._on_hide = on_hide
         self._on_reset = on_reset
@@ -65,43 +71,43 @@ class SystemTray:
         self._on_quit = on_quit
         self._visible = True
 
-        self._icon = pystray.Icon(
-            "ClaudeLight",
-            _make_tray_image(),
-            "ClaudeLight",
-            menu=self._build_menu(),
-        )
+        self.setIcon(_make_tray_icon())
+        self.setToolTip("ClaudeLight")
+        self._rebuild_menu()
+        self.show()
 
-    def run_detached(self) -> None:
-        import threading
-        threading.Thread(target=self._icon.run, daemon=True).start()
+    # ── public ─────────────────────────────────────────────────
 
     def stop(self) -> None:
-        self._icon.stop()
+        self.hide()
 
-    def _build_menu(self) -> pystray.Menu:
-        return pystray.Menu(
-            pystray.MenuItem(
-                "Hide Floating Light" if self._visible else "Show Floating Light",
-                self._toggle,
-            ),
-            pystray.MenuItem("Reset Position", self._on_reset),
-            pystray.Menu.SEPARATOR,
-            pystray.MenuItem("Preview Status", pystray.Menu(
-                pystray.MenuItem("Idle", lambda: self._on_set_status(Status.idle)),
-                pystray.MenuItem("Working", lambda: self._on_set_status(Status.working)),
-                pystray.MenuItem("Approval", lambda: self._on_set_status(Status.approval)),
-            )),
-            pystray.Menu.SEPARATOR,
-            pystray.MenuItem("Quit", self._on_quit),
+    # ── private ────────────────────────────────────────────────
+
+    def _rebuild_menu(self) -> None:
+        menu = QMenu()
+
+        toggle_label = (
+            "Hide Floating Light" if self._visible else "Show Floating Light"
         )
+        menu.addAction(toggle_label, self._toggle)
+        menu.addAction("Reset Position", self._on_reset)
+        menu.addSeparator()
+
+        preview_menu = menu.addMenu("Preview Status")
+        preview_menu.addAction("Idle", lambda: self._on_set_status(Status.idle))
+        preview_menu.addAction("Working", lambda: self._on_set_status(Status.working))
+        preview_menu.addAction("Approval", lambda: self._on_set_status(Status.approval))
+
+        menu.addSeparator()
+        menu.addAction("Quit", self._on_quit)
+
+        self.setContextMenu(menu)
 
     def _toggle(self) -> None:
         if self._visible:
             self._on_hide()
             self._visible = False
-            self._icon.menu = self._build_menu()
         else:
             self._on_show()
             self._visible = True
-            self._icon.menu = self._build_menu()
+        self._rebuild_menu()
