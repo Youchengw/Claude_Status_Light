@@ -18,6 +18,45 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 PLUGIN_SOURCE = REPO_ROOT / "claude-status-light-plugin"
 
 
+def detect_python() -> str:
+    """Return the best available Python command for this system.
+
+    Tries ``python3`` first (standard on macOS / Linux),
+    falls back to ``python`` (standard on Windows),
+    then falls back to the current interpreter.
+    """
+    for cmd in ("python3", "python"):
+        if shutil.which(cmd):
+            return cmd
+    return sys.executable
+
+
+def patch_hooks_json(plugin_path: Path) -> None:
+    """Replace ``python3`` with the platform-appropriate Python command.
+
+    Only touches the *installed copy* of hooks.json — never the repo
+    source.  On macOS / Linux the detected command is almost always
+    ``python3`` so this is a no-op; on Windows it patches ``python3``
+    → ``python``.
+    """
+    hooks_path = plugin_path / "hooks" / "hooks.json"
+    if not hooks_path.exists():
+        return
+
+    python_cmd = detect_python()
+    if python_cmd == "python3":
+        return  # already correct
+
+    content = hooks_path.read_text(encoding="utf-8")
+    # Replace ``python3 `` (with trailing space, inside quotes) so we
+    # only touch command invocations, not random occurrences of the
+    # string "python3".
+    patched = content.replace('"python3 "', f'"{python_cmd} "')
+    if patched != content:
+        hooks_path.write_text(patched, encoding="utf-8")
+        print(f"  Patched hooks.json: python3 → {python_cmd}")
+
+
 @dataclass
 class Paths:
     home: Path
@@ -188,6 +227,11 @@ def uninstall_plugin(paths: Paths) -> None:
 
 def command_install(paths: Paths, mode: str, skip_claude: bool) -> None:
     sync_plugin_source(paths, mode)
+    # Patch hooks.json for platforms where ``python3`` is not the
+    # standard command (e.g. Windows).  Skip symlinks so the repo
+    # source stays pristine.
+    if not paths.installed_plugin_path.is_symlink():
+        patch_hooks_json(paths.installed_plugin_path)
     upsert_marketplace_entry(paths)
     if not skip_claude:
         install_plugin(paths)
