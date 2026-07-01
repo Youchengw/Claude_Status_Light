@@ -64,10 +64,13 @@ jobs:
       - name: Build binary
         run: pyinstaller --onefile --name ClaudeLight desktop/main.py
 
+      - name: Package tar.gz
+        run: cd dist && tar czf ClaudeLight.tar.gz ClaudeLight
+
       - uses: actions/upload-artifact@v4
         with:
           name: ClaudeLight-Linux
-          path: dist/ClaudeLight
+          path: dist/ClaudeLight.tar.gz
 
   # ── GitHub Release ────────────────────────────────────────
   release:
@@ -86,5 +89,5 @@ jobs:
           files: |
             ClaudeLight-macOS.zip
             ClaudeLight.exe
-            ClaudeLight
+            ClaudeLight.tar.gz
           generate_release_notes: true

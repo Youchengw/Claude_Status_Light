@@ -10,25 +10,34 @@
 
 ## 快速开始
 
-### 1. 下载
+### 1. 获取 ClaudeLight
 
-| 平台 | 下载 |
-|------|------|
-| **macOS** | [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight-macOS.zip` → 拖到 `/Applications` |
-| **Windows** | [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight.exe` |
-| **Linux** | [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight` 二进制，或从源码运行：`pip install -r desktop/requirements.txt && python desktop/main.py` |
+| 平台 | 获取方式 |
+|------|---------|
+| **macOS** | 从 [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight-macOS.zip` → 拖到 `/Applications` |
+| **Windows** | 从 [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight.exe` |
+| **Linux** | 从 [Releases](https://github.com/Youchengw/ClaudeLight/releases) 下载 `ClaudeLight.tar.gz`，或 `git clone https://github.com/Youchengw/ClaudeLight.git` 从源码运行 |
 
 ### 2. 安装插件
 
 ```bash
-git clone https://github.com/Youchengw/ClaudeLight.git
 cd ClaudeLight
 ./scripts/install.sh
 ```
 
-### 3. 使用 Claude Code
+> 如果还没 clone 仓库（macOS / Windows 用户），先执行 `git clone https://github.com/Youchengw/ClaudeLight.git`。
 
-打开 ClaudeLight，然后正常使用 `claude`。状态灯会自动跟随。
+### 3. 启动 ClaudeLight
+
+| 平台 | 操作 |
+|------|------|
+| **macOS** | 双击 `/Applications` 中的 `ClaudeLight.app`，或 `swift run ClaudeLight`（开发） |
+| **Windows** | 双击 `ClaudeLight.exe` |
+| **Linux** | `tar xzf ClaudeLight.tar.gz && chmod +x ClaudeLight && ./ClaudeLight`（或从源码 `python desktop/main.py`） |
+
+### 4. 使用 Claude Code
+
+保持 ClaudeLight 运行，正常使用 `claude`。状态灯会自动跟随。
 
 ## 功能
 

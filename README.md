@@ -10,25 +10,34 @@ A floating pixel-art desktop pet + menu bar icon that shows [Claude Code](https:
 
 ## Quick Start
 
-### 1. Download
+### 1. Get ClaudeLight
 
-| Platform | Download |
-|----------|----------|
-| **macOS** | `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) → drag to `/Applications` |
-| **Windows** | `ClaudeLight.exe` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) |
-| **Linux** | `ClaudeLight` binary from [Releases](https://github.com/Youchengw/ClaudeLight/releases), or run from source: `pip install -r desktop/requirements.txt && python desktop/main.py` |
+| Platform | How to get it |
+|----------|---------------|
+| **macOS** | Download `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) → drag to `/Applications` |
+| **Windows** | Download `ClaudeLight.exe` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) |
+| **Linux** | Download `ClaudeLight.tar.gz` from [Releases](https://github.com/Youchengw/ClaudeLight/releases), or `git clone https://github.com/Youchengw/ClaudeLight.git` to run from source |
 
 ### 2. Install the plugin
 
 ```bash
-git clone https://github.com/Youchengw/ClaudeLight.git
 cd ClaudeLight
 ./scripts/install.sh
 ```
 
-### 3. Use Claude Code
+> If you haven't cloned the repo yet (macOS / Windows), run `git clone https://github.com/Youchengw/ClaudeLight.git` first.
 
-Open ClaudeLight and run `claude` as usual. The light follows automatically.
+### 3. Launch ClaudeLight
+
+| Platform | Command |
+|----------|---------|
+| **macOS** | Double-click `ClaudeLight.app` in `/Applications`, or `swift run ClaudeLight` (dev) |
+| **Windows** | Double-click `ClaudeLight.exe` |
+| **Linux** | `tar xzf ClaudeLight.tar.gz && chmod +x ClaudeLight && ./ClaudeLight` (or `python desktop/main.py` from source) |
+
+### 4. Use Claude Code
+
+Keep ClaudeLight running and use `claude` as usual — the light follows automatically.
 
 ## Features
 
