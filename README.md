@@ -15,7 +15,6 @@ A floating pixel-art desktop pet + menu bar icon that shows [Claude Code](https:
 | Platform | How to get it |
 |----------|---------------|
 | **macOS** | Download `ClaudeLight-macOS.zip` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) → drag to `/Applications` |
-| **Windows** | Download `ClaudeLight.exe` from [Releases](https://github.com/Youchengw/ClaudeLight/releases) |
 | **Linux** | Download `ClaudeLight.tar.gz` from [Releases](https://github.com/Youchengw/ClaudeLight/releases), or `git clone https://github.com/Youchengw/ClaudeLight.git` to run from source |
 
 ### 2. Install the plugin
@@ -25,14 +24,13 @@ cd ClaudeLight
 ./scripts/install.sh
 ```
 
-> If you haven't cloned the repo yet (macOS / Windows), run `git clone https://github.com/Youchengw/ClaudeLight.git` first.
+> If you haven't cloned the repo yet (macOS), run `git clone https://github.com/Youchengw/ClaudeLight.git` first.
 
 ### 3. Launch ClaudeLight
 
 | Platform | Command |
 |----------|---------|
 | **macOS** | Double-click `ClaudeLight.app` in `/Applications`, or `swift run ClaudeLight` (dev) |
-| **Windows** | Double-click `ClaudeLight.exe` |
 | **Linux** | `tar xzf ClaudeLight.tar.gz && chmod +x ClaudeLight && ./ClaudeLight` (or `python desktop/main.py` from source) |
 
 ### 4. Use Claude Code
@@ -56,14 +54,13 @@ swift run ClaudeLight                     # Run directly via Swift Package Manag
 ./scripts/package-release-zip.sh          # Package as .zip → ./dist/
 ```
 
-**Windows / Linux** (Python + PyQt6):
+**Linux** (Python + PyQt6):
 
 ```bash
 cd desktop
 pip install -r requirements.txt
 python main.py                            # Run directly
-# Windows: build_windows.bat              # → dist/ClaudeLight.exe
-# Linux:   ./build_linux.sh               # → dist/ClaudeLight
+./build_linux.sh                          # Package as binary → dist/ClaudeLight
 ```
 
 ## How It Works

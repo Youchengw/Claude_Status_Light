@@ -22,27 +22,6 @@ jobs:
           name: ClaudeLight-macOS
           path: dist/ClaudeLight-macOS.zip
 
-  # ── Windows .exe ──────────────────────────────────────────
-  windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install -r desktop/requirements.txt
-
-      - name: Build .exe
-        run: pyinstaller --onefile --windowed --name ClaudeLight desktop/main.py
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ClaudeLight-Windows
-          path: dist/ClaudeLight.exe
-
   # ── Linux binary ──────────────────────────────────────────
   linux:
     runs-on: ubuntu-latest
@@ -74,7 +53,7 @@ jobs:
 
   # ── GitHub Release ────────────────────────────────────────
   release:
-    needs: [macos, windows, linux]
+    needs: [macos, linux]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -88,6 +67,5 @@ jobs:
         with:
           files: |
             ClaudeLight-macOS.zip
-            ClaudeLight.exe
             ClaudeLight.tar.gz
           generate_release_notes: true
